@@ -1,0 +1,97 @@
+{
+  "kind": "build-plan-schema",
+  "version": 1,
+  "target_type": "context-graph",
+  "label": "Interf built-in Build Plan schema",
+  "artifacts": [
+    {
+      "id": "home",
+      "description": "Context Graph index note. Routes to the summaries coverage layer, knowledge graph layer, and task-specific Artifact handoffs; downstream agents should start from artifacts/ for task work.",
+      "shape": { "kind": "path", "path": "home.md", "artifact_kind": "file" },
+      "checks": [
+        { "id": "exists", "kind": "file_exists", "description": "The graph index note exists.", "required": true },
+        {
+          "id": "no-placeholder",
+          "kind": "must_not_contain",
+          "description": "The graph index note does not contain placeholder text.",
+          "required": true,
+          "params": { "phrases": ["Not yet built."] }
+        },
+        { "id": "wikilinks", "kind": "wikilinks_valid", "description": "Every graph index wikilink resolves.", "required": true }
+      ],
+      "built_by_stages": ["shape"]
+    },
+    {
+      "id": "summaries",
+      "description": "Coverage layer with one source-named folder per source file. Non-paginated sources have summary.md. PDFs, decks, and visual/paginated sources include manifest.md plus page/slide folders for every inspected page/slide; uninspected pages/slides must be called out with not_extracted_reason. Every note links back to the original Source path and page/section/figure/table refs instead of copying source files.",
+      "shape": { "kind": "path", "path": "summaries", "artifact_kind": "directory" },
+      "checks": [
+        {
+          "id": "source-summary-folders",
+          "kind": "source_summary_folders",
+          "description": "Every source file has a source-named folder with summary.md or manifest.md.",
+          "required": true,
+          "params": { "match": "source_total" }
+        },
+        { "id": "frontmatter-valid", "kind": "frontmatter_valid", "description": "Every summary note has valid frontmatter.", "required": true },
+        {
+          "id": "evidence-keys",
+          "kind": "frontmatter_required_keys",
+          "description": "Every summary note records source and evidence metadata.",
+          "required": true,
+          "params": { "keys": ["source", "source_file_id", "source_path", "source_locator", "source_kind", "evidence_tier", "truth_mode", "state"] }
+        }
+      ],
+      "built_by_stages": ["summarize"]
+    },
+    {
+      "id": "knowledge",
+      "description": "Task-aware Context Graph layer built from summaries and source refs. Current default is flat knowledge/*.md notes. Notes may contain claims, entities, topics, and indexes, but remain navigation and assurance rather than the authority for exact source claims.",
+      "shape": { "kind": "path", "path": "knowledge", "artifact_kind": "directory" },
+      "checks": [
+        { "id": "exists", "kind": "min_file_count", "description": "Knowledge layer contains notes for task-aware navigation.", "required": true, "params": { "min": 3 } },
+        { "id": "wikilinks", "kind": "wikilinks_valid", "description": "Every knowledge wikilink resolves.", "required": true }
+      ],
+      "built_by_stages": ["structure", "shape"]
+    },
+    {
+      "id": "artifacts",
+      "description": "Task-specific requested Artifact handoffs for downstream agents. These notes point to original Source files, pages, figures, tables, sections, units, periods, and caveats; they may link to summaries or knowledge notes for drilldown, but source files remain the authority for exact claims.",
+      "shape": { "kind": "path", "path": "artifacts", "artifact_kind": "directory" },
+      "checks": [
+        { "id": "exists", "kind": "min_file_count", "description": "At least one task-specific Artifact handoff note exists.", "required": true, "params": { "min": 1 } },
+        { "id": "frontmatter-valid", "kind": "frontmatter_valid", "description": "Every Artifact handoff note has valid frontmatter.", "required": true },
+        {
+          "id": "handoff-frontmatter",
+          "kind": "frontmatter_required_keys",
+          "description": "Every Artifact handoff records task, source reference, and verification posture.",
+          "required": true,
+          "params": { "keys": ["task", "source_refs", "handoff_type", "truth_mode", "verification_state", "caveats"] }
+        },
+        {
+          "id": "handoff-source-refs",
+          "kind": "source_refs_required",
+          "description": "Every Artifact handoff has non-empty source refs.",
+          "required": true,
+          "params": { "keys": ["source_refs"] }
+        },
+        {
+          "id": "handoff-nonempty-fields",
+          "kind": "frontmatter_nonempty_keys",
+          "description": "Every Artifact handoff has non-empty task, source refs, verification state, and caveats.",
+          "required": true,
+          "params": { "keys": ["task", "source_refs", "verification_state", "caveats"] }
+        },
+        {
+          "id": "source-authority-caveat",
+          "kind": "must_contain",
+          "description": "Artifact handoffs tell agents to follow original Source refs for exact claims.",
+          "required": true,
+          "params": { "phrases": ["original Source", "source refs"] }
+        },
+        { "id": "wikilinks", "kind": "wikilinks_valid", "description": "Every Artifact handoff wikilink resolves.", "required": true }
+      ],
+      "built_by_stages": ["shape"]
+    }
+  ]
+}

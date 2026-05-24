@@ -1,0 +1,96 @@
+{
+  "id": "interf-default",
+  "type": "build-plan",
+  "runtime_api": {
+    "kind": "build",
+    "version": 1
+  },
+  "purpose": {
+    "label": "Build Context Graph",
+    "task_hint": "Build mixed source files into a three-layer Context Graph: summaries for coverage, knowledge for task-aware structure, and artifacts for downstream agent handoff with links back to original sources."
+  },
+  "inputs": [
+    {
+      "id": "source",
+      "label": "Source",
+      "description": "Source references assigned to each stage by Interf runtime.",
+      "required": true
+    }
+  ],
+  "label": "Built-in Interf Build Plan",
+  "hint": "Built-in Build Plan that builds a Context Graph with source coverage summaries, task-aware knowledge, requested Artifact handoffs, links back to sources, Build evidence, and traces.",
+  "stages": [
+    {
+      "id": "summarize",
+      "label": "Summarize",
+      "description": "Turn source files into source-named coverage folders under summaries/, with summary.md or manifest.md plus page/slide notes for every inspectable paginated or visual source page.",
+      "contract_type": "build-file-evidence",
+      "role": "summarizer",
+      "skill_dir": "summarize",
+      "reads": [],
+      "writes": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "structure",
+      "label": "Structure",
+      "description": "Build the task-aware knowledge graph from summaries as flat knowledge/*.md notes, including claims, entities, topics, indexes, and links back to source refs.",
+      "contract_type": "build-knowledge-structure",
+      "role": "structurer",
+      "skill_dir": "structure",
+      "reads": [
+        "summaries"
+      ],
+      "writes": [
+        "knowledge"
+      ]
+    },
+    {
+      "id": "shape",
+      "label": "Shape",
+      "description": "Shape task-specific Artifact handoffs and the Context Graph index around the saved task focus and Context Checks.",
+      "contract_type": "build-query-shape",
+      "role": "structurer",
+      "skill_dir": "shape",
+      "reads": [
+        "summaries",
+        "knowledge"
+      ],
+      "writes": [
+        "knowledge",
+        "artifacts",
+        "home"
+      ]
+    }
+  ],
+  "stage_policy_notes": {
+    "summarize": [
+      "Favor conservative, source-grounded summaries that prove coverage and preserve evidence tiers; leave broader synthesis for later stages.",
+      "Create one folder under `summaries/` per source file, named so a human can match it to the original source file.",
+      "For non-paginated sources, write `summaries/<source-name>/summary.md`.",
+      "For PDFs, decks, images, or paginated/visual reports, write `summaries/<source-name>/manifest.md` and page or slide folders such as `pages/001/summary.md` for every page/slide that can be inspected. If a page/slide cannot be extracted, record `not_extracted_reason` in the manifest instead of silently skipping it. Include optional screenshots or visual trace paths only when useful and available.",
+      "Every summary or page note must link back to the original Source path and the relevant page, section, figure, table, or region. Do not copy source files into the Context Graph.",
+      "Keep scratch extraction commands single-purpose and non-destructive."
+    ],
+    "structure": [
+      "Build task-aware claims, entities, topics, and indexes from the summaries and their source refs as flat markdown notes under `knowledge/`.",
+      "Use taxonomy and ontology only when it improves retrieval, navigation, and evidence tracking.",
+      "Treat knowledge notes as navigation and assurance, not as the authority for exact wording, table values, chart reads, or provenance-sensitive claims.",
+      "For small Sources, prefer a minimal stable graph over exhaustive note sprawl.",
+      "When you add wikilinks, target real Context Graph notes by exact basename or explicit relative path. Do not invent title-style links unless that exact title is also a declared note label or alias.",
+      "Do not add wikilinks in structure outputs to files that the shape stage creates later. If a route belongs in `home.md` or a later shaped note, leave plain text now and let the later stage add the link.",
+      "For summary references, prefer explicit links like `[[summaries/<source-name>/summary]]`, `[[summaries/<source-name>/manifest]]`, or plain source refs. For knowledge notes, prefer final filenames under `knowledge/`."
+    ],
+    "shape": [
+      "Use the saved task focus and Context Checks to bias the final Context Graph toward the agent task it should be especially good at.",
+      "Do not copy benchmark expected answers into the final Context Graph.",
+      "Write one or more notes under `artifacts/` as the downstream agent handoff. These notes should tell the agent which original Source files, pages, figures, tables, sections, units, periods, series, and caveats matter.",
+      "Artifacts should route the agent to original Source refs for exact claims. Do not present generated summaries or knowledge notes as the dataset or source of truth.",
+      "If a saved Context Check depends on source-derived values that may be approximate, preserve the stated range, limits, evidence tier, and source inspection requirement.",
+      "For unlabeled charts or visual marks, either create a measurement note with visual reference, calibration, method, and uncertainty, or tell the downstream agent to inspect the original Source before answering.",
+      "Prefer better routing, prioritization, and focused navigation over speculative synthesis or answer-only notes.",
+      "Any wikilinks you add to `home.md` or indexes must resolve to real Context Graph note basenames or explicit relative paths."
+    ]
+  }
+}

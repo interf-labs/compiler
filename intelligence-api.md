@@ -44,13 +44,13 @@ remain relevant after task or Source changes.
 
 ## Disclosure and usage
 
-Only the reviewed task and category labels go to Interf Platform and its model
+Only the reviewed task and category labels go to Interf Intelligence and its model
 provider, under the provider's terms. Interf retains each request and recommendation
 until account deletion. Interf adds no filenames, paths, Source ids, excerpts,
 raw data, Instructions or private Interface. Text chosen by the caller may itself
 identify a person or company.
 
-GET on the Cloud operation with `request_id` reads retained usage for the current
+GET on `recommend-interface` with `request_id` reads retained usage for the current
 account. Caller-supplied recommendation data is not proof of provider spend.
 Unavailable usage remains unknown; reusing a recommendation does not multiply its
 physical provider calls.

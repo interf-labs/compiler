@@ -48,7 +48,7 @@ Runtime bearer into a prompt. The MCP server does not implicitly start a Runtime
 
 Interf account sign-in and vendor CLI authentication are separate. Local work
 with the user's own configured Agent does not require a new Interf account
-sign-in. When the requested account or Cloud operation needs it, use
+sign-in. When the requested account or cloud operation needs it, use
 `interf auth login --json` and follow `interf auth status --json`, or MCP
 `auth_login_start` and `auth_login_progress`. Complete only the intended account
 verification with the user's authorization; report pending or refused access.
@@ -307,7 +307,7 @@ clear existing defaults. Scan can use an explicit Agent id without changing its
     With explicit authorization, use `interf sources check-access <local-source-id>
     --agent-id <agent-id>` or MCP `source_access_check` to ask the selected Agent
     about its own access. This starts an advisory Run, not a read-only inspection
-    or accepted Scan; managed execution uses credits. Poll that Run before
+    or accepted Scan; Interf Agent uses credits, and your own Agent is free. Poll that Run before
     reporting its result. A successful Source-level advisory result alone does
     not prove access to every cited item; it does not replace the complete check
     above. When updating from replacement local Sources, explicitly select them

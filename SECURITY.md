@@ -4,7 +4,7 @@ We take security issues seriously. Thank you for helping keep Interf safe for th
 
 ## Supported Versions
 
-Only the latest published release of `@interf/compiler` on npm and the current `main` branch of [`interf-labs/compiler`](https://github.com/interf-labs/compiler) receive security fixes.
+Only the latest published release of `@interf/compiler` on npm receives security fixes. The [`interf-labs/compiler`](https://github.com/interf-labs/compiler) repository holds the public specification, schemas and skill; the compiler itself is proprietary.
 
 ## Reporting a Vulnerability
 

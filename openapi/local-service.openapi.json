@@ -335,7 +335,7 @@
           "Auth"
         ],
         "summary": "Start or resume Free account authorization",
-        "description": "Reuse saved authorization or return the exact browser verification action. No Desktop callback, profile onboarding or purchase is required.",
+        "description": "Reuse saved authorization or return the exact browser verification action. No Studio callback, profile onboarding or purchase is required.",
         "requestBody": {
           "required": true,
           "content": {
@@ -410,8 +410,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Start human Interf Cloud login",
-        "description": "Start one Interf Cloud login attempt and return a human-safe browser URL without waiting for completion. Protected-preview fallback URLs carrying a durable host bypass are refused with a typed unavailable response.",
+        "summary": "Start Interf account sign-in",
+        "description": "Start one Interf account sign-in attempt and return a human-safe browser URL without waiting for completion. Protected-preview fallback URLs carrying a durable host bypass are refused with a typed unavailable response.",
         "requestBody": {
           "required": true,
           "content": {
@@ -497,7 +497,7 @@
           "Auth"
         ],
         "summary": "Sign out",
-        "description": "Revoke the cloud session held by this device, then clear the exact captured local session. A newer login survives the revoke wait; an account deletion that is already committing explicitly retains the session until deletion finishes; and an unconfirmed cloud revoke is reported as pending with the reason.",
+        "description": "Revoke the Interf account session held by this device, then clear the exact captured local session. A newer login survives the revoke wait; an account deletion that is already committing explicitly retains the session until deletion finishes; and an unconfirmed account revoke is reported as pending with the reason.",
         "requestBody": {
           "required": true,
           "content": {
@@ -539,8 +539,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Configure Interf Cloud",
-        "description": "Set or clear the Interf Cloud app URL used by Desktop, CLI, and the local service. This stores an Interf-owned URL, never a vendor URL.",
+        "summary": "Configure the Interf account URL",
+        "description": "Set or clear the Interf account app URL used by Studio, CLI, and the local service. This stores an Interf-owned URL, never a vendor URL.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1551,8 +1551,8 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "List authenticated Cloud Sources",
-        "description": "Forward the Desktop's authenticated Source registry read to the configured Interf Cloud origin without exposing its Cloud bearer.",
+        "summary": "List Sources uploaded to the cloud",
+        "description": "Forward Studio's authenticated Source registry read to the configured Interf account origin without exposing its account bearer.",
         "responses": {
           "200": {
             "description": "Success",
@@ -1582,7 +1582,7 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "Finalize an authenticated Cloud Source upload",
+        "summary": "Finalize a cloud Source upload",
         "description": "Forward one exact prepared Source identity and return its redacted Source plus durable inventory Run.",
         "requestBody": {
           "required": true,
@@ -1635,8 +1635,8 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "Prepare an authenticated Cloud Source upload",
-        "description": "Forward only the managed Source upload intent or its durable recovery identity; the authenticated local Runtime owns Desktop's bounded create-only provider transfer.",
+        "summary": "Prepare a cloud Source upload",
+        "description": "Forward only the managed Source upload intent or its durable recovery identity; the authenticated local Runtime owns Studio's bounded create-only provider transfer.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1688,8 +1688,8 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "Upload one prepared Cloud Source archive",
-        "description": "Relay exact authenticated Desktop bytes through the local process to its cached create-only provider capability without exposing that capability to the renderer.",
+        "summary": "Upload one prepared cloud Source archive",
+        "description": "Relay exact authenticated Studio bytes through the local process to its cached create-only provider capability without exposing that capability to the renderer.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1754,7 +1754,7 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "Get an authenticated Cloud Source",
+        "summary": "Get a cloud Source",
         "description": "Forward one Source read and return only the redacted managed projection.",
         "parameters": [
           {
@@ -1796,7 +1796,7 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "Delete an authenticated Cloud Source",
+        "summary": "Delete a cloud Source",
         "description": "Forward explicit Source deletion after the fresh linked-Graph preflight; failures leave the Source visible and retryable.",
         "parameters": [
           {
@@ -1840,7 +1840,7 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "List Graphs linked to an authenticated Cloud Source",
+        "summary": "List Graphs linked to a cloud Source",
         "description": "Forward the fresh linked-Graph preflight used before an uploaded Source can be deleted.",
         "parameters": [
           {
@@ -1884,8 +1884,8 @@
         "tags": [
           "Runtime Sources"
         ],
-        "summary": "Retry an authenticated Cloud Source scan",
-        "description": "Resolve the failed inventory Run once at Runtime authority and continue that exact Run; Desktop relays this action without exposing its Cloud bearer.",
+        "summary": "Retry a cloud Source scan",
+        "description": "Resolve the failed inventory Run once at Runtime authority and continue that exact Run; Studio relays this action without exposing its account bearer.",
         "parameters": [
           {
             "name": "source_id",
@@ -1993,7 +1993,7 @@
           "Runtime Sources"
         ],
         "summary": "Check selected Agent access to a Source",
-        "description": "Admit one advisory Source access Run for the selected Agent. This does not scan Source or accept Inventory; managed execution requires customer credits.",
+        "description": "Admit one advisory Source access Run for the selected Agent. This does not scan Source or accept Inventory; Interf Agent requires customer credits.",
         "parameters": [
           {
             "name": "source_id",

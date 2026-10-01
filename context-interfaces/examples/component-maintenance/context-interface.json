@@ -1,0 +1,85 @@
+{
+  "kind": "graph-shape",
+  "version": 3,
+  "kinds": [
+    {
+      "id": "system-component",
+      "label": "System Component",
+      "description": "A reusable system component that may need ongoing maintenance."
+    },
+    {
+      "id": "component-story",
+      "label": "Component Story",
+      "description": "A story that demonstrates a reusable system component in use."
+    },
+    {
+      "id": "source-reference",
+      "label": "Source Reference",
+      "description": "A source-linked file or location that supports the maintenance reference."
+    },
+    {
+      "id": "maintenance-note",
+      "label": "Maintenance Note",
+      "description": "A maintenance-relevant observation about a component, story, or source reference."
+    }
+  ],
+  "relationships": [
+    {
+      "id": "demonstrated-by",
+      "label": "Demonstrated by",
+      "from": "system-component",
+      "to": "component-story"
+    },
+    {
+      "id": "component-source",
+      "label": "Component source",
+      "from": "system-component",
+      "to": "source-reference"
+    },
+    {
+      "id": "story-source",
+      "label": "Story source",
+      "from": "component-story",
+      "to": "source-reference"
+    },
+    {
+      "id": "note-about-component",
+      "label": "Note about component",
+      "from": "maintenance-note",
+      "to": "system-component"
+    },
+    {
+      "id": "note-about-story",
+      "label": "Note about story",
+      "from": "maintenance-note",
+      "to": "component-story"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "maintenance-reference",
+      "path": "maintenance-reference.md",
+      "kind": "file",
+      "contains": [
+        "system-component",
+        "component-story",
+        "source-reference",
+        "maintenance-note"
+      ],
+      "required": true
+    },
+    {
+      "id": "reference-nodes",
+      "path": "reference",
+      "kind": "directory",
+      "contains": [
+        "system-component",
+        "component-story",
+        "source-reference",
+        "maintenance-note"
+      ],
+      "required": true
+    }
+  ],
+  "entrypoint": "maintenance-reference"
+}

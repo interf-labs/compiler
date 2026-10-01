@@ -1,0 +1,762 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "revision": {
+      "type": "object",
+      "properties": {
+        "manifest": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "interf-graph-revision-manifest"
+            },
+            "version": {
+              "type": "number",
+              "const": 1
+            },
+            "graph_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$"
+            },
+            "revision_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            "parent_revision": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "graph_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9-]*$"
+                    },
+                    "revision_id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                    },
+                    "manifest_digest": {
+                      "type": "string",
+                      "pattern": "^sha256:[a-f0-9]{64}$"
+                    }
+                  },
+                  "required": [
+                    "graph_id",
+                    "revision_id",
+                    "manifest_digest"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "plan": {
+              "type": "object",
+              "properties": {
+                "approval_id": {
+                  "type": "string",
+                  "pattern": "^build-plan-approval_[a-f0-9]{64}$"
+                },
+                "plan_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                },
+                "plan_digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "approval_id",
+                "plan_id",
+                "plan_digest"
+              ],
+              "additionalProperties": false
+            },
+            "run_id": {
+              "type": "string",
+              "pattern": "^(build|update|job|run)_[a-z0-9]+_?[a-z0-9]*$"
+            },
+            "graph_bundle": {
+              "type": "object",
+              "properties": {
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                },
+                "byte_count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "media_type": {
+                  "type": "string",
+                  "const": "application/json"
+                }
+              },
+              "required": [
+                "digest",
+                "byte_count",
+                "media_type"
+              ],
+              "additionalProperties": false
+            },
+            "output_bundle": {
+              "type": "object",
+              "properties": {
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                },
+                "byte_count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "media_type": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "digest",
+                "byte_count"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_bundle": {
+              "type": "object",
+              "properties": {
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                },
+                "byte_count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "media_type": {
+                  "type": "string",
+                  "const": "application/json"
+                }
+              },
+              "required": [
+                "digest",
+                "byte_count",
+                "media_type"
+              ],
+              "additionalProperties": false
+            },
+            "readiness": {
+              "type": "object",
+              "properties": {
+                "coverage": {
+                  "type": "object",
+                  "properties": {
+                    "expected": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "accounted_for": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "missing": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "stage_id": {
+                            "type": "string",
+                            "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                          },
+                          "source_id": {
+                            "type": "string",
+                            "pattern": "^src-[a-f0-9]{16,64}$"
+                          },
+                          "file_id": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "stage_id",
+                          "source_id",
+                          "file_id"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "blocked": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "stage_id": {
+                            "type": "string",
+                            "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                          },
+                          "source_id": {
+                            "type": "string",
+                            "pattern": "^src-[a-f0-9]{16,64}$"
+                          },
+                          "file_id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "reason": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "stage_id",
+                          "source_id",
+                          "file_id",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "expected",
+                    "accounted_for",
+                    "missing",
+                    "blocked"
+                  ],
+                  "additionalProperties": false
+                },
+                "graph_satisfies_interface": {
+                  "type": "boolean"
+                },
+                "ready": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "coverage",
+                "graph_satisfies_interface",
+                "ready"
+              ],
+              "additionalProperties": false
+            },
+            "committed_at": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "version",
+            "graph_id",
+            "revision_id",
+            "parent_revision",
+            "plan",
+            "run_id",
+            "graph_bundle",
+            "output_bundle",
+            "evidence_bundle",
+            "readiness",
+            "committed_at"
+          ],
+          "additionalProperties": false
+        },
+        "manifest_ref": {
+          "type": "object",
+          "properties": {
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "byte_count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "media_type": {
+              "type": "string",
+              "const": "application/json"
+            }
+          },
+          "required": [
+            "digest",
+            "byte_count",
+            "media_type"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "manifest",
+        "manifest_ref"
+      ],
+      "additionalProperties": false
+    },
+    "consumption": {
+      "type": "string",
+      "enum": [
+        "source-linked",
+        "self-contained"
+      ]
+    },
+    "context_interface": {
+      "type": "object",
+      "properties": {
+        "document": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "graph-shape"
+            },
+            "version": {
+              "type": "number",
+              "const": 3
+            },
+            "consumption": {
+              "type": "string",
+              "enum": [
+                "source-linked",
+                "self-contained"
+              ]
+            },
+            "kinds": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "label",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "relationships": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "from": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                  },
+                  "to": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "label",
+                  "from",
+                  "to"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "outputs": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "directory"
+                    ]
+                  },
+                  "contains": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                    }
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "path",
+                  "kind",
+                  "contains",
+                  "required"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "entrypoint": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+            }
+          },
+          "required": [
+            "kind",
+            "version",
+            "kinds",
+            "relationships",
+            "outputs",
+            "entrypoint"
+          ],
+          "additionalProperties": false
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "check": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "const": "not-checked"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "match",
+                    "mismatch"
+                  ]
+                },
+                "expected_digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "status",
+                "expected_digest"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "document",
+        "digest",
+        "check"
+      ],
+      "additionalProperties": false
+    },
+    "entrypoint": {
+      "type": "object",
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "node_id",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "sources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^src-[a-f0-9]{16,64}$"
+          },
+          "inventory_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "observed_at": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "graph-revision"
+              },
+              "parent": {
+                "type": "object",
+                "properties": {
+                  "graph_id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*$"
+                  },
+                  "revision_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                  },
+                  "manifest_digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[a-f0-9]{64}$"
+                  }
+                },
+                "required": [
+                  "graph_id",
+                  "revision_id",
+                  "manifest_digest"
+                ],
+                "additionalProperties": false
+              },
+              "manifest": {
+                "type": "object",
+                "properties": {
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[a-f0-9]{64}$"
+                  },
+                  "byte_count": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "media_type": {
+                    "type": "string",
+                    "const": "application/json"
+                  }
+                },
+                "required": [
+                  "digest",
+                  "byte_count",
+                  "media_type"
+                ],
+                "additionalProperties": false
+              },
+              "output_bundle": {
+                "type": "object",
+                "properties": {
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[a-f0-9]{64}$"
+                  },
+                  "byte_count": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "media_type": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "digest",
+                  "byte_count"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind",
+              "parent",
+              "manifest",
+              "output_bundle"
+            ],
+            "additionalProperties": false
+          },
+          "selected_scope": {
+            "type": "object",
+            "properties": {
+              "source_incarnation_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "paths": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "source_incarnation_id",
+              "paths"
+            ],
+            "additionalProperties": false
+          },
+          "items": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "path": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "content_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[a-f0-9]{64}$"
+                    },
+                    "byte_count": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "path",
+                    "content_hash"
+                  ],
+                  "additionalProperties": false
+                },
+                "output_refs": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "node_id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+                      },
+                      "path": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "node_id",
+                      "path"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "file",
+                "output_refs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "access": {
+            "type": "string",
+            "const": "unchecked"
+          },
+          "freshness": {
+            "type": "string",
+            "const": "unknown"
+          }
+        },
+        "required": [
+          "source_id",
+          "inventory_id",
+          "digest",
+          "observed_at",
+          "items",
+          "access",
+          "freshness"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "kind": {
+      "type": "string",
+      "const": "interf-graph-requirements"
+    },
+    "version": {
+      "type": "number",
+      "const": 1
+    },
+    "instructions": {
+      "type": "string",
+      "enum": [
+        "If the receiving application requires a Context Interface, keep its independently supplied requirement unchanged. Before use, verify this companion's selected graph_id, revision_id and manifest_ref.digest against the accepted package you intended to receive. Validate context_interface.document with the strict graph-shape version 3 schema, compute its canonical digest using graphShapeDigest or this standalone recipe, and compare it first with context_interface.digest, then with your independently required canonical digest. Standalone recipe: strict validation adds no defaults or coercions and does not trim or Unicode-normalize strings; preserve all string contents and array order. Recursively sort object keys in ascending UTF-16 code-unit order (not locale order); schema keys are nonnumeric. Serialize with compact ECMAScript JSON.stringify semantics, native string escaping, no BOM, indentation or trailing newline; encode as UTF-8 and hash with SHA-256. Prefix the 64 lowercase hexadecimal digits with sha256:. Use this same recipe for the independently required document. Matching names, paths, kind labels or readiness alone are not a match. A match proves exact Interface identity conditional on trusting this accepted package; it does not independently authenticate arbitrary downloaded bytes or prove semantic fitness or Source access. Without a requirement report not checked; absent or unverifiable Interface evidence is unavailable, never match or mismatch. On mismatch choose a matching Revision or prepare one with the required shared Interface; do not replace the requirement with this Graph's Interface or rewrite accepted files. A supplied check result applies only to its expected_digest, so recompute the comparison for your own requirement. Private Source mappings are not Interface evidence. This dependency companion follows Context protocol version 1; AGENTS.md identifies its matching specification and Interf skill. This dependency companion works directly with the accepted Graph files: no Interf installation, account, Runtime Source registration, Scan or Update is required. For file-only use, keep one private local mapping from each original source_id to your authorized folder or remote connection. Before starting the requested work, use your own authorized tools to check each distinct observed (source_id, inventory_id, digest, file_id) version listed in the cited items. Use safe filename and relative-path hints to narrow candidate files within locations the user authorizes, then compare candidate bytes with the expected checksum. A checksum confirms byte identity; it does not locate a file, prove freshness or establish factual or semantic correctness. Do not search the whole device merely because a checksum is present. Do not expand the check to all scanned or reviewed-but-unused files. Names, paths, registrations, mappings and Source-level connectivity alone prove neither item access nor exact content identity. Report exact checksum matches, changed material, missing items and unchecked items separately before the requested work, and explain the limitations. The user may explicitly choose to proceed with those limitations; do not label changed or unchecked material as verified historical evidence. That choice creates no accepted evidence or access claim and grants no permission. Missing bytes cannot be reconstructed from a checksum. Accepted Graph readiness and graph_handoff_confirm prove no Source access. Do not share private locators or rewrite accepted Graph content when a mapping changes. Use the strict private JSON format interf-graph-source-mapping version 1: revision is {graph_id, revision_id, manifest_digest} copied from this companion's selected revision and manifest_ref.digest; entries contains unique {source_id, expected_local_source, target, local_source} objects. For a standalone mapping, expected_local_source is null and local_source may be omitted. A target is {kind: local-folder, locator: absolute-folder-path}, or {kind: agent-location, locator: your-authorized-tool-reference} with optional type and scope; never include credentials. A null target clears that reviewed entry. Resolve each cited file through its logical source_id and relative-path hints; use your authorized tool for agent-location targets. Preserve the exported expected_local_source baseline; when choosing another location remove local_source so explicit Runtime import can resolve a unique existing registration. Keep the private mapping outside accepted output and every shared export. In a delivered Graph directory, use the recipient-created .interf-local.json version 2 companion and its reported checks; keep it ignored and untracked. The version 1 mapping below remains an explicit Runtime import format. Runtime export/import is explicit and starts no registration, Scan or Update. Retained output can require an older observed version of the same item alongside its current version. Use output_refs and the exact Inventory pin to distinguish them; one location mapping does not make both byte versions available. For Runtime cited reads, qualify node_id when an item has multiple observed versions; unqualified ambiguous reads refuse. Exact historical Runtime cited reads always refuse mismatched bytes, even when the user chooses to work with changed material. Missing original bytes remain unavailable and cannot be recreated from Graph evidence.",
+        "If the receiving application requires a Context Interface, keep its independently supplied requirement unchanged. Before use, verify this companion's selected graph_id, revision_id and manifest_ref.digest against the accepted package you intended to receive. Validate context_interface.document with the strict graph-shape version 3 schema, compute its canonical digest using graphShapeDigest or this standalone recipe, and compare it first with context_interface.digest, then with your independently required canonical digest. Standalone recipe: strict validation adds no defaults or coercions and does not trim or Unicode-normalize strings; preserve all string contents and array order. Recursively sort object keys in ascending UTF-16 code-unit order (not locale order); schema keys are nonnumeric. Serialize with compact ECMAScript JSON.stringify semantics, native string escaping, no BOM, indentation or trailing newline; encode as UTF-8 and hash with SHA-256. Prefix the 64 lowercase hexadecimal digits with sha256:. Use this same recipe for the independently required document. Matching names, paths, kind labels or readiness alone are not a match. A match proves exact Interface identity conditional on trusting this accepted package; it does not independently authenticate arbitrary downloaded bytes or prove semantic fitness or Source access. Without a requirement report not checked; absent or unverifiable Interface evidence is unavailable, never match or mismatch. On mismatch choose a matching Revision or prepare one with the required shared Interface; do not replace the requirement with this Graph's Interface or rewrite accepted files. A supplied check result applies only to its expected_digest, so recompute the comparison for your own requirement. Private Source mappings are not Interface evidence. This dependency companion follows Context protocol version 1; AGENTS.md identifies its matching specification and Interf skill. This dependency companion works directly with the accepted Graph files: no Interf installation, account, Runtime Source registration, Scan or Update is required. This Graph is self-contained: consume the knowledge represented in its generated files without locating, mapping or reading original Source files. The sources and items in this companion retain build provenance, not mandatory consumption prerequisites. Do not register, scan, download or search for originals to begin using this Graph. Preserve citations; optional verification against originals requires separate authorized access. Self-contained describes the intended consumption contract, not independent proof of factual correctness or semantic sufficiency. Report omissions or uncertainty in the represented knowledge instead of claiming access to unavailable originals."
+      ]
+    }
+  },
+  "required": [
+    "revision",
+    "consumption",
+    "context_interface",
+    "entrypoint",
+    "sources",
+    "kind",
+    "version",
+    "instructions"
+  ],
+  "additionalProperties": false
+}

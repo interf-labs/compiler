@@ -1,45 +1,43 @@
 # Contributing
 
-This public surface contains the files users and agent hosts need to inspect:
-the README, license and security docs, bundled Skills, and public Build Plans.
+This public surface contains the docs and agent artifacts users need to inspect.
+Do not add private maintainer paths, local machine paths, company plans, or
+website source here.
 
-Only files under `public-repo` are intended for this public surface. Do not add
-source paths outside `public-repo`, maintainer docs, or repo-specific operating
-instructions here.
+## Public projections
 
-The marketing website is maintained separately in `interf-labs/interf-website`.
-Do not add landing-page code, website assets, or website operating notes to this
-public SDK/package surface.
+- Product and install projection: [`README.md`](README.md)
+- Security: [`SECURITY.md`](SECURITY.md)
+- Agent workflow: [`skills/interf/SKILL.md`](skills/interf/SKILL.md)
+- Strict output ABI: [`context-interfaces/`](context-interfaces/README.md)
 
-## What To Change Here
+## Contract rules
 
-- Public product docs: the public README, `SECURITY.md`, and `TRADEMARKS.md`.
-- Agent Skills: `skills/interf/`.
-- Public Build Plans: `build-plans/`.
+- Graph is the top-level product object.
+- Sources remain read-only and reusable.
+- A Context Interface document (wire noun `graph_shape`) is source-path-free,
+  task-instance-free, strict, and explicitly versioned.
+- A Graph-scoped approval selects the exact reviewed Interface digest.
+- A Build Plan pins each selected Source's exact Inventory and references that
+  Interface approval.
+- Execution requires separate approval of the exact Plan.
+- Graph Revisions are immutable; folders are replaceable materializations.
+- Public docs never point to maintainer-only or private repository paths.
 
-## Public Build Plans
+## How changes land
 
-Build Plans are inspectable folders. Keep them standalone:
+This directory is a published projection, not a buildable project: it ships no
+`package.json`, no test runner, and no scripts, so there is nothing to run here
+before opening a PR.
 
-- `build-plan.json` is the current technical filename for Build Plan stages,
-  requested outputs, coverage requirements, and graph entrypoints.
-- `build-plan.schema.json` is the current technical filename for the Build Plan
-  package contract.
-- `build/stages/<stage>/SKILL.md` contains stage instructions.
-- `use/query/SKILL.md` tells agents how to read the Context Graph.
-- `improve/SKILL.md` tells Interf how to revise the Build Plan when coverage,
-  Stage Manifest validation, or graph output requirements fail.
+Propose wording or contract changes as an issue or a PR against these files.
+The maintainer release gate is what validates them, and it runs two checks that
+matter for anything you send:
 
-For the shipped default Build Plan, edit `build-plans/interf-default/`.
+- the public doc layout check, which keeps this directory the single source for
+  the packaged docs rather than a copy of them
+- the OpenAPI generation check, which re-derives the document under
+  [`openapi/`](openapi/) from the Runtime's own operation table
 
-## Agent Skills
-
-Keep `skills/interf/SKILL.md` as the canonical Skill.
-
-## Before Opening A PR
-
-Check that public docs do not reference private paths such as internal source
-trees, maintainer-only docs, or local machine paths.
-
-If you changed a Build Plan, test it with an installed `interf`
-runtime before submitting the change.
+[`openapi/`](openapi/) is therefore generated. Edit the Runtime contract, not
+the JSON: a hand edit is overwritten by the next generation, never adopted.

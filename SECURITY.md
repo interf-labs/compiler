@@ -12,7 +12,7 @@ Only the latest published release of `@interf/compiler` on npm and the current `
 
 Preferred disclosure paths, in order:
 
-1. **Email**: [security@interf.com](mailto:security@interf.com) — primary contact for any security report
+1. **Email**: [security@interf.com](mailto:security@interf.com): primary contact for any security report
 2. **GitHub Security Advisories**: use [private vulnerability reporting](https://github.com/interf-labs/compiler/security/advisories/new) on the `interf-labs/compiler` repository
 3. **PGP**: encrypted reports accepted on request via the email above
 
@@ -27,7 +27,7 @@ Please include:
 
 - We will acknowledge your report within **72 hours**
 - We will provide an initial assessment within **7 days**
-- We will work with you on coordinated disclosure timing — typically a fix released before public disclosure
+- We will work with you on coordinated disclosure timing. Typically a fix is released before public disclosure
 
 ## Safe Harbor
 
@@ -47,7 +47,7 @@ Security reports are especially relevant for:
 - command execution boundaries (subprocess, agent shell-out)
 - accidental leakage of private local files or runtime artifacts
 - authentication or authorization bypasses on `interf runtime` / `/v1/*` endpoints
-- test or Build Plan files causing unintended code execution
+- Context Interface documents or test fixtures causing unintended code execution
 - supply-chain risks in dependencies
 
 ## Bug Bounty Program

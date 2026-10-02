@@ -1,5 +1,9 @@
 # Interf Intelligence API
 
+> For agents: use only the commands, flags and fields on this page, exactly as written. Run `interf --version` first; if it prints a different version, use `interf --help` and `interf <command> --help` instead of this page. llms.txt at the repository root lists every page.
+>
+> Checked against `@interf/compiler` 0.51.0.
+
 Get optional recommendations before privately preparing a Context Interface.
 
 ```http

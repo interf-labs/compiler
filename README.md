@@ -1,11 +1,15 @@
 # Interf
 
+> For agents: use only the commands, flags and fields on this page, exactly as written. Run `interf --version` first; if it prints a different version, use `interf --help` and `interf <command> --help` instead of this page. llms.txt at the repository root lists every page.
+>
+> Checked against `@interf/compiler` 0.51.0.
+
 Give your agents the context they need.
 
 Category: Reusable context preparation for agents.
 
 This repository holds the open parts of Interf: the Context Interface
-specification, its schemas and an example, and the Interf skill for agents. The
+specification, its schemas and examples, and the Interf skill for agents. The
 compiler itself, `@interf/compiler` on npm, is free to use with your own agents.
 
 ## The problem
@@ -36,14 +40,16 @@ fact was understood.
 ## The contract
 
 - [Specification](context-interfaces/SPEC.md): the Context Interface document,
-  the Graph package and Context protocol version 1 (release `context-protocol-v1`).
+  the Graph folder and Context protocol version 1 (release `context-protocol-v1.1`;
+  see the [changelog](CHANGELOG.md)).
 - JSON Schemas: [Context Interface](context-interfaces/context-interface.schema.json),
   [Source requirements](context-interfaces/graph-requirements.schema.json) and
   [private Source mapping](context-interfaces/graph-local.schema.json).
-- [Example](context-interfaces/examples/component-maintenance/README.md): a
-  Context Interface for component maintenance work.
+- Examples: [Fed watch](context-interfaces/examples/fed-watch/README.md), for FOMC
+  statements and minutes, and [component maintenance](context-interfaces/examples/component-maintenance/README.md).
 - [Interf skill](skills/interf/SKILL.md): teaches your agent the reviewed
   preparation loop.
+- [llms.txt](llms.txt): every public page, for agents.
 
 A Context Interface is strict JSON (`"kind": "graph-shape"`, version 3), and
 unknown fields fail. It holds no Source paths, prompts, credentials or executable
@@ -72,6 +78,9 @@ interf runtime start    # the local Runtime, on your device
 interf help             # every command, grouped: set up, organize, prepare, observe
 ```
 
+Without installing, run any command as `npx @interf/compiler <command>`. Never
+run `npx interf`: that is a retired package.
+
 Then connect the agent you already use, in one of three ways:
 
 - **Skill:** give your agent the [Interf skill](skills/interf/SKILL.md). It
@@ -85,7 +94,8 @@ Now ask your agent to prepare a Graph for a piece of work from a folder. It scan
 the folder, drafts the Context Interface and the Build Plan, and stops twice for
 you: approve the exact Interface, then the exact Build Plan with its estimated
 cost. Only then does it build. The result is a Graph your agents can read, and a
-ZIP you can hand to any agent.
+ZIP you can hand to any agent. [Prepare your first Graph](first-graph/README.md)
+walks through the same loop step by step with four public FOMC statements.
 
 Local work with your own agent needs no Interf account. Interf Studio, the Mac
 app, wraps the same compiler and is optional.
@@ -96,7 +106,7 @@ give a delivered Graph ZIP to any agent.
 
 ## What is open and what is not
 
-- **Open, Apache-2.0:** the specification, schemas and example in
+- **Open, Apache-2.0:** the specification, schemas and examples in
   `context-interfaces/`, and the Interf skill in `skills/`.
 - **Proprietary:** everything else, including the compiler, Interf Studio and
   the [Runtime API description](openapi/README.md). The compiler ships as a

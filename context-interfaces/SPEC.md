@@ -1,13 +1,12 @@
 # Context Interface: document specification
 
-Status: public contract summary. Public name: **Context Interface**. The wire
-format and code keep the frozen `graph_shape` noun.
+> For agents: use only the commands, flags and fields on this page, exactly as written. Run `interf --version` first; if it prints a different version, use `interf --help` and `interf <command> --help` instead of this page. llms.txt at the repository root lists every page.
+>
+> Checked against `@interf/compiler` 0.51.0.
 
-Change log: the product-noun rename moved human-readable metadata only.
-The OpenAPI TAG is now "Runtime Context Interfaces" (grouping metadata
-follows the product noun), while every operationId, route path, payload
-key stays byte-identical. Regenerators of downstream clients should expect
-the tag change, require `graph_shape` version 3, and reject version 2.
+Status: public contract summary. Public name: **Context Interface**. The wire
+format and code keep the frozen `graph_shape` noun. Releases are listed in the
+[changelog](../CHANGELOG.md).
 
 ## Document
 
@@ -165,16 +164,82 @@ First require the recomputed companion document digest to equal
 `context_interface.digest`; only then compare it with the independently required
 digest. Bind the selected Revision and manifest digest to the trusted accepted
 package as described above. A valid hash alone does not establish that trust.
+
 ## Context protocol version 1
 
-Release identifier: `context-protocol-v1`. The protocol specification and
-[Interf skill](../skills/interf/SKILL.md) are Apache-2.0; see [LICENSE.md](LICENSE.md).
+Current release: `context-protocol-v1.1`. Each release is an immutable Git tag
+on this repository; the [changelog](../CHANGELOG.md) lists them. A release never
+changes the wire versions (`graph-shape` 3, `interf-graph-requirements` 1,
+`interf-graph-source-mapping` 1 and 2), so a Graph folder delivered under
+`context-protocol-v1` stays valid and keeps citing that release. The protocol
+specification and [Interf skill](../skills/interf/SKILL.md) are Apache-2.0; see
+[LICENSE.md](LICENSE.md).
 
-A delivered Graph folder contains `README.md`, `AGENTS.md`, `.gitignore`,
-the exact accepted `graph.tar.gz`, and `source-requirements.json`.
-Extract accepted files into a separate `output/` child. Local Graph Open
-materializes that child beside the same companions. Delivery guidance does not
-modify accepted output, its archive digest, or its Context Interface.
+### Graph folder
+
+```text
+graph-folder/
+  README.md                 how to use this Graph
+  AGENTS.md                 the same guidance for agents, with the protocol lines below
+  .gitignore                keeps the private file, its lock and temporary saves out of Git
+  graph.tar.gz              the exact accepted Graph
+  source-requirements.json  interf-graph-requirements version 1
+  output/                   accepted files extracted from graph.tar.gz
+  .interf-local.json        private mapping and reported checks, version 2
+  .interf-local.json.lock   present only while a writer saves
+```
+
+The shareable ZIP holds the first five files. Extract accepted files into a
+separate `output/` child. Local Graph Open materializes that child beside the
+same companions. Delivery guidance does not modify accepted output, its archive
+digest, or its Context Interface. Only the recipient creates `.interf-local.json`,
+and only on request.
+
+Each cited item version reports one status:
+
+| Status | Reported when |
+| --- | --- |
+| `unchecked` | No matching reported check: not checked yet, nothing mapped, or the target or requirements changed after the check |
+| `exact` | A reported read whose hash equals the cited version's hash |
+| `changed` | A reported read whose hash differs |
+| `missing` | The mapped location has no file at the cited path |
+| `unavailable` | The mapped location could not be read |
+
+Each status is a reported observation with its recorded time, not proof of
+current access, permission or freshness. A self-contained Graph needs no checks.
+
+Every `AGENTS.md` written under this release carries these protocol lines
+verbatim, after the requirements' instructions. Folders delivered under
+`context-protocol-v1` carry the same lines without the `npx` line.
+
+```text
+Keep accepted output unchanged. The delivery directory is not accepted Graph content.
+The only recipient state is .interf-local.json: kind interf-graph-source-mapping, version 2, revision, requirements_digest, entries and checks.
+Copy revision from these requirements, using manifest_ref.digest as manifest_digest. Compute requirements_digest using the canonical JSON/SHA-256 recipe in the requirements instructions.
+Entries use the version 1 mapping fields described below; expected_local_source is null for a new standalone entry. Start checks as an empty array.
+A reported check identifies source_id, inventory_id, inventory_digest, file_id, requirements_digest, target_digest and observed_at. Compute target_digest from the exact entry target with the same canonical recipe.
+Its result is {outcome: read, content_hash: sha256:...}, {outcome: missing} or {outcome: unavailable}. Use valid JSON with quoted names and values.
+A matching reported hash means exact bytes at the recorded time; a different hash means changed. No matching check means unchecked. A changed target or requirements invalidates earlier checks.
+These editable reports are not authenticated current access, freshness, permission or accepted evidence. Explain gaps; the user may choose limited use. Self-contained use needs no original checks.
+Create this private file with owner-only permissions. Keep it ignored and untracked. Refresh before editing. To save, exclusively create .interf-local.json.lock, reread the requirements and exact prior file digest, refuse a stale read, then atomically replace the private file. Remove only the lock inode you created.
+Agents using their own file tools must follow that same lock protocol or serialize edits with Studio/CLI. An editor that ignores the lock can race the final replacement; do not edit simultaneously in that editor.
+Optional CLI: interf graphs files <delivery-directory> --json. Add --init to create the private file; --source <id> --target '<JSON target or null>' --expected-digest <digest or absent> to edit; --check to explicitly check mapped cited local files.
+Without an Interf installation, run the same commands as npx @interf/compiler graphs files <delivery-directory>; never npx interf, which is a retired package.
+No Runtime, account, Source registration, Scan or Update is required for these file operations. An Agent can use its own authorized tools instead.
+```
+
+The optional CLI reads, creates, maps and checks, with no Runtime. One command
+cannot combine `--init` and `--check`. A `local-folder` locator must be an
+absolute path; `~` is refused.
+
+```sh
+interf graphs files /delivered/graph --json
+interf graphs files /delivered/graph --init
+interf graphs files /delivered/graph --source <source-id> --target '{"kind":"local-folder","locator":"/authorized/folder"}' --expected-digest <prior-digest-or-absent>
+interf graphs files /delivered/graph --check
+```
+
+### Requirements and the private file
 
 `source-requirements.json` is `interf-graph-requirements` version 1.
 Its [structural schema](graph-requirements.schema.json) pins the accepted Revision,
@@ -225,15 +290,6 @@ the exact private-file Revision, and known logical Sources. To independently
 compare an application requirement, preserve the supplied requirement and compute
 its own digest; without one, report `not-checked`. A saved supplied comparison
 never substitutes for this receiving application's comparison.
-
-Optional CLI (no Runtime required):
-
-```sh
-interf graphs files /delivered/graph --json
-interf graphs files /delivered/graph --init
-interf graphs files /delivered/graph --source <source-id> --target '{"kind":"local-folder","locator":"/authorized/folder"}' --expected-digest <prior-digest-or-absent>
-interf graphs files /delivered/graph --check
-```
 
 The CLI and connected Studio read the same file and use the same pure projection.
 Studio offers explicit refresh, mapping save and mapped-file checks. Protocol

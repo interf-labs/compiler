@@ -6,6 +6,10 @@ license: Apache-2.0
 
 # Interf
 
+> For agents: use only the commands, flags and fields on this page, exactly as written. Run `interf --version` first; if it prints a different version, use `interf --help` and `interf <command> --help` instead of this page. llms.txt at the repository root lists every page.
+>
+> Checked against `@interf/compiler` 0.51.0.
+
 Use Interf when the user wants an agent to work from a source-backed Graph
 rather than repeatedly rediscovering files.
 
@@ -32,6 +36,8 @@ with npm; the published package is `@interf/compiler`:
 npm install --global @interf/compiler
 interf --help
 ```
+Without installing, run the same commands through npx, for example
+`npx @interf/compiler --help`. Never run `npx interf`: that is a retired package.
 Published releases may lag the source checkout. Use the intended installed
 version's help and tool schemas, not commands assumed from another version.
 
@@ -220,7 +226,7 @@ clear existing defaults. Scan can use an explicit Agent id without changing its
     provenance. Report knowledge gaps instead of assuming unavailable facts.
     For `source-linked`, use safe filename and relative-path hints only within authorized
     locations, then check candidate bytes against the expected hashes. Report
-    exact, changed, missing and unchecked items separately and explain their
+    exact, changed, missing, unavailable and unchecked items separately and explain their
     effect on the requested work. The user may explicitly proceed with those
     limitations; never label changed or unchecked material as verified historical
     evidence. This requires no Scan or Update and grants no additional access.
@@ -253,8 +259,9 @@ clear existing defaults. Scan can use an explicit Agent id without changing its
     safety, semantic correctness or freshness.
 
     Follow [Context protocol version 1](../../context-interfaces/SPEC.md#context-protocol-version-1)
-    and its strict requirements/private-file schemas. The matching release
-    is `context-protocol-v1`.
+    and its strict requirements/private-file schemas. The current release
+    is `context-protocol-v1.1`; folders delivered under `context-protocol-v1`
+    stay valid.
     The recipient-created `.interf-local.json` is version 2, owner-only, ignored
     and untracked. Agents, the CLI and connected Studio edit that same file.
     Each reported check binds the complete requirements digest, logical Source,

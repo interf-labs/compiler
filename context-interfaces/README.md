@@ -1,8 +1,13 @@
 # Context Interface
 
+> For agents: use only the commands, flags and fields on this page, exactly as written. Run `interf --version` first; if it prints a different version, use `interf --help` and `interf <command> --help` instead of this page. llms.txt at the repository root lists every page.
+>
+> Checked against `@interf/compiler` 0.51.0.
+
 This Apache-2.0 public protocol and the [Interf skill](../skills/interf/SKILL.md)
 also describe delivered Graph folders; see [Context protocol version 1](SPEC.md#context-protocol-version-1).
-The matching release is `context-protocol-v1`.
+The current release is `context-protocol-v1.1`; the [changelog](../CHANGELOG.md)
+lists every release.
 
 A Context Interface is the exact strict blueprint that defines the logical
 output one Graph Build must produce. The wire format and schema keep the
@@ -20,8 +25,9 @@ prepare and approve the Build Plan → build the Graph. The approved Plan digest
 binds the selected Interface, task, pinned Source Inventories, and ordered
 stages.
 
-See [`SPEC.md`](SPEC.md) for the document contract, including which parts are
-shipped and which are the decided direction.
+See [`SPEC.md`](SPEC.md) for the document contract. Examples:
+[Fed watch](examples/fed-watch/README.md) and
+[component maintenance](examples/component-maintenance/README.md).
 
 ## Publish and reuse
 
@@ -36,6 +42,9 @@ Validate a saved file without a Runtime connection, account, Graph, or Sources:
 interf context-interface validate --file context-interface.json
 interf context-interface validate --file context-interface.json --json
 ```
+
+Without an installation, run the same command as
+`npx @interf/compiler context-interface validate --file context-interface.json`.
 
 Success prints the canonical document digest; invalid documents fail. Validation
 checks the Interface document, not whether a Graph satisfies it or is Ready.

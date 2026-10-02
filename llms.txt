@@ -1,0 +1,32 @@
+# Interf
+
+> Give your agents the context they need. Reusable context preparation for agents. A knowledge graph: a folder of .md files agents can reuse, with source coverage.
+
+These pages describe `@interf/compiler` 0.51.0 and the Context protocol release `context-protocol-v1.1`. Each page states the compiler version it was checked against; run `interf --version` and prefer `interf --help` when they differ.
+
+## Start
+
+- [README](README.md): the problem, the contract, install and first use
+- [Prepare your first Graph](first-graph/README.md): four FOMC statements from Scan to a changed dependency status
+
+## Specification
+
+- [Context Interface specification](context-interfaces/SPEC.md): the document, the Graph folder and Context protocol version 1
+- [Context Interface overview](context-interfaces/README.md): validate, load and share an Interface
+- [Context Interface JSON Schema](context-interfaces/context-interface.schema.json)
+- [Source requirements JSON Schema](context-interfaces/graph-requirements.schema.json)
+- [Private Source mapping JSON Schema](context-interfaces/graph-local.schema.json)
+- [Example: Fed watch](context-interfaces/examples/fed-watch/README.md): FOMC statements and minutes
+- [Example: component maintenance](context-interfaces/examples/component-maintenance/README.md)
+- [Changelog](CHANGELOG.md): protocol releases
+
+## Agent skill
+
+- [Interf skill](skills/interf/SKILL.md): the reviewed preparation loop through the CLI or MCP
+
+## Optional
+
+- [Interf Intelligence API](intelligence-api.md): optional recommendations before preparing an Interface
+- [OpenAPI](openapi/README.md): the published Runtime routes
+- [Security](SECURITY.md): reporting a vulnerability
+- [Contributing](CONTRIBUTING.md): how changes land

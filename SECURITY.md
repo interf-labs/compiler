@@ -1,5 +1,9 @@
 # Security Policy
 
+> For agents: use only the commands, flags and fields on this page, exactly as written. Run `interf --version` first; if it prints a different version, use `interf --help` and `interf <command> --help` instead of this page. llms.txt at the repository root lists every page.
+>
+> Checked against `@interf/compiler` 0.51.0.
+
 We take security issues seriously. Thank you for helping keep Interf safe for the people who use it.
 
 ## Supported Versions

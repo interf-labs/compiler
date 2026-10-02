@@ -1,0 +1,100 @@
+{
+  "kind": "graph-shape",
+  "version": 3,
+  "consumption": "source-linked",
+  "kinds": [
+    {
+      "id": "policy-path",
+      "label": "Policy Path",
+      "description": "How the Committee's policy stance moved across the covered meetings, and the reasons it gave."
+    },
+    {
+      "id": "meeting",
+      "label": "Meeting",
+      "description": "One Federal Open Market Committee meeting and the statement or minutes published for it."
+    },
+    {
+      "id": "policy-decision",
+      "label": "Policy Decision",
+      "description": "The target range for the federal funds rate and the balance sheet actions announced for one meeting."
+    },
+    {
+      "id": "economic-assessment",
+      "label": "Economic Assessment",
+      "description": "The Committee's stated view of economic activity, employment and inflation at one meeting."
+    },
+    {
+      "id": "forward-guidance",
+      "label": "Forward Guidance",
+      "description": "What the Committee said it would weigh when considering future adjustments."
+    },
+    {
+      "id": "dissent",
+      "label": "Dissent",
+      "description": "A member's vote against one policy decision and the preference that member stated."
+    }
+  ],
+  "relationships": [
+    {
+      "id": "includes-meeting",
+      "label": "Includes meeting",
+      "from": "policy-path",
+      "to": "meeting"
+    },
+    {
+      "id": "decided-at",
+      "label": "Decided at",
+      "from": "policy-decision",
+      "to": "meeting"
+    },
+    {
+      "id": "assessed-at",
+      "label": "Assessed at",
+      "from": "economic-assessment",
+      "to": "meeting"
+    },
+    {
+      "id": "guidance-at",
+      "label": "Guidance at",
+      "from": "forward-guidance",
+      "to": "meeting"
+    },
+    {
+      "id": "dissents-from",
+      "label": "Dissents from",
+      "from": "dissent",
+      "to": "policy-decision"
+    },
+    {
+      "id": "follows",
+      "label": "Follows",
+      "from": "meeting",
+      "to": "meeting"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "fed-watch",
+      "path": "fed-watch.md",
+      "kind": "file",
+      "contains": [
+        "policy-path"
+      ],
+      "required": true
+    },
+    {
+      "id": "meetings",
+      "path": "meetings",
+      "kind": "directory",
+      "contains": [
+        "meeting",
+        "policy-decision",
+        "economic-assessment",
+        "forward-guidance",
+        "dissent"
+      ],
+      "required": true
+    }
+  ],
+  "entrypoint": "fed-watch"
+}
